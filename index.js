@@ -21,4 +21,3 @@ const start = async() => {
 start()
 
 app.listen(process.env.PORT || 3001, () => console.log(`Server is running on the port ${process.env.PORT}`))
-
