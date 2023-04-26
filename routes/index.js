@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const historyRouter = require('./historyRouter')
 const messageRouter = require('./messageRouter')
+const userRouter = require('./userRouter')
 
 router.use('/send_message', messageRouter)
-router.use('/get_history', historyRouter)
+router.use('/check_user', userRouter) 
 
 module.exports = router;

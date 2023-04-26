@@ -1,44 +1,31 @@
 const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
-const ObjectId = Schema.ObjectId;
+// const ObjectId = Schema.ObjectId;
+// _id: ObjectId
 
 const UserData = new Schema({
-  author: ObjectId,
-  email: String, 
-  title: String,
-  body: String,
-  date: Date
+  user_id: String,
+  user_email: String, 
+  subscription_tier: String,
+  chats_list:[String],
+  insights_list: [String],
+  guides_list: [String],
+  created_at: Date
 });
 
 const ChatHistory = new Schema({
   user_id: String,
   chat_content: [Object],
+  isIntroduction: Boolean,
   created_at: Date
 });
 
-module.exports = mongoose.model('ChatHistory', ChatHistory)
+const UserModel = mongoose.model('UserData', UserData);
+const ChatModel = mongoose.model('ChatHistory', ChatHistory);
 
-// User:
-// {
-//     user_id: 456;
-//     chat_list: [123, 123];
-//     registration_date: new Date;
-//     insights: [];
-//     guides: [];
-//     staus: 'free/pro';
-// }
+module.exports = {
+  UserModel,
+  ChatModel
+};
 
-// Chat:
-// {
-//     user_id: 123;
-//     chat_content: [{text: 'abc'}];
-//     created_at: new Date;
-// }
-
-// {
-//   message_id: Number;
-//   message_type: String; //('user/chat/insight/guides')
-//   message_text: String
-//   created_at: Date;
-// }
