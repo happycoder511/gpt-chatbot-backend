@@ -12,7 +12,9 @@ const UserData = new Schema({
 });
 
 const ChatHistory = new Schema({
+  user_id: String,
   chat_content: [Object],
+  created_at: Date
 });
 
 module.exports = mongoose.model('ChatHistory', ChatHistory)
@@ -29,7 +31,7 @@ module.exports = mongoose.model('ChatHistory', ChatHistory)
 
 // Chat:
 // {
-//     chat_id: 123;
+//     user_id: 123;
 //     chat_content: [{text: 'abc'}];
 //     created_at: new Date;
 // }
