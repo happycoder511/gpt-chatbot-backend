@@ -1,4 +1,4 @@
-const { ChatModel } = require ("../db_models/db_models");
+const { ChatModel, UserModel } = require ("../db_models/db_models");
 const { runCompletion } = require("../openai");
 
 class messageController {
@@ -44,7 +44,6 @@ class messageController {
                 .create({
                     user_id: userId, 
                     chat_content:[...newMessages],
-                    isIntroduction: true,
                     created_at: new Date
                 });
         }
@@ -85,11 +84,85 @@ class messageController {
             .create({
                 user_id: userId, 
                 chat_content: chatHistory,
-                isIntroduction: true,
                 created_at: new Date
             });
         return res.json({ 
             createChat: createChat.chat_content
+        })
+    }
+
+    async saveAnsweredQuestion(req, res) {
+        let {userId, introductionQuestionNumber, userChatHistory} = req.body
+
+        const updatedUser = await UserModel.findOneAndUpdate(
+            {user_id: userId}, 
+            {"introduction_question_number": introductionQuestionNumber}
+        );
+        const updatedChatHistory = await ChatModel.findOneAndUpdate(
+            {user_id: userId}, 
+            {chat_content: [...userChatHistory]}
+        )
+        
+        return
+    }
+
+
+    async saveAllAnsweredQuestions(req, res) {
+        let {userId, introductionQuestionNumber, userChatHistory, isIntroductionQuestion} = req.body
+
+        const questionsForChatGPT = [];
+        userChatHistory.map(message => {
+            if (message.message_type==='user') {
+                questionsForChatGPT.push(message.message_text)
+            }
+        })
+    
+        //Waiting for ChatGPT response
+        const openaiResponse = await runCompletion(questionsForChatGPT[questionsForChatGPT.length-1])
+
+        const updatedUser = await UserModel.findOneAndUpdate(
+            { user_id: userId }, 
+            { "$set": 
+                { 
+                    "is_introduction_question": isIntroductionQuestion, 
+                    "introduction_question_number": introductionQuestionNumber
+                }
+            }
+        );
+
+        const updatedChatHistory = await ChatModel.findOneAndUpdate(
+            {user_id: userId}, 
+            {chat_content: [
+                ...userChatHistory,
+                {
+                    message_id: userState.userChatHistory.length,
+                    message_type: 'insight',
+                    message_text: openaiResponse,
+                    created_at: new Date(),
+                }
+            ]}
+        )
+
+        return res.json({ 
+            openaiResponse
+        })
+    }
+
+    async allAnsweredQuestionsNotRegistered(req, res) {
+        let {userChatHistory} = req.body
+
+        const questionsForChatGPT = [];
+        userChatHistory.map(message => {
+            if (message.message_type==='user') {
+                questionsForChatGPT.push(message.message_text)
+            }
+        })
+        
+        //Waiting for ChatGPT response
+        const openaiResponse = await runCompletion(questionsForChatGPT[questionsForChatGPT.length-1])
+
+        return res.json({ 
+            openaiResponse
         })
     }
 }

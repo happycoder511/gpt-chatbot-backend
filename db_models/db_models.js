@@ -11,21 +11,30 @@ const UserData = new Schema({
   chats_list:[String],
   insights_list: [String],
   guides_list: [String],
+  is_introduction_question: Boolean,
+  introduction_question_number: Number,
   created_at: Date
 });
 
 const ChatHistory = new Schema({
   user_id: String,
   chat_content: [Object],
-  isIntroduction: Boolean,
+  created_at: Date
+});
+
+const Questionnaire = new Schema({
+  id: String, //q1, q2, q3 ...
+  introduction_question_list: Array, //['Question1', 'Question2', 'Question3']
   created_at: Date
 });
 
 const UserModel = mongoose.model('UserData', UserData);
 const ChatModel = mongoose.model('ChatHistory', ChatHistory);
+const QuestionnaireModel = mongoose.model('Questionnaire', Questionnaire);
 
 module.exports = {
   UserModel,
-  ChatModel
+  ChatModel,
+  QuestionnaireModel
 };
 

@@ -8,7 +8,7 @@ const openai = new OpenAIApi(configuration);
 
 const runCompletion = async (input) => {
     const completion = await openai.createChatCompletion({
-        model: "gpt-3.5-turbo", 
+        model: process.env.OPENAI_API_MODEL, 
         messages: [
             {role: "user", content: input}
         ]
