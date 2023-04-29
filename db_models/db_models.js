@@ -1,8 +1,20 @@
 const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
-// const ObjectId = Schema.ObjectId;
-// _id: ObjectId
+
+const ChatHistory = new Schema({
+  user_id: String,
+  chat_content: [Object],
+  created_at: Date
+});
+
+// chat_content: [Object] из ChatHistory, состоит из набора следующих объектов:
+// {
+//   message_id: '',
+//   message_type: 'user', //'user/chat/insight/guides'
+//   message_text: chatMessage,
+//   created_at: new Date,
+// }
 
 const UserData = new Schema({
   user_id: String,
@@ -13,12 +25,6 @@ const UserData = new Schema({
   guides_list: [String],
   is_introduction_question: Boolean,
   introduction_question_number: Number,
-  created_at: Date
-});
-
-const ChatHistory = new Schema({
-  user_id: String,
-  chat_content: [Object],
   created_at: Date
 });
 
@@ -37,4 +43,3 @@ module.exports = {
   ChatModel,
   QuestionnaireModel
 };
-
