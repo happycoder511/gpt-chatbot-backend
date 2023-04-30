@@ -10,7 +10,7 @@ OPENAI_API_MODEL="gpt-3.5-turbo"/"gpt-4"
 
 Для установки зависимостей и старта:
 npm i
-npm run devStart
+npm run dev
 
 Связь бека с апишкой ChatGPT бота находиться в openai.js
 
