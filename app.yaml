@@ -1,0 +1,9 @@
+runtime: nodejs18
+
+env_variables:
+  PORT: 3001 
+  DB_USER: "admin" 
+  DB_PASSWORD: "zuYniHhpJwDZEbrU" 
+  DB_NAME: "aptchat-dev" 
+  OPENAI_API_KEY: "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"
+  OPENAI_API_MODEL: "gpt-3.5-turbo"
