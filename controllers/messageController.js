@@ -150,7 +150,6 @@ class messageController {
 
     async allAnsweredQuestionsNotRegistered(req, res) {
         let {userChatHistory} = req.body
-
         const questionsForChatGPT = [];
         userChatHistory.map(message => {
             if (message.message_type==='user') {
@@ -158,9 +157,13 @@ class messageController {
             }
         })
         
-        //Waiting for ChatGPT response
-        const openaiResponse = await runCompletion(questionsForChatGPT[questionsForChatGPT.length-1])
+        let content = questionsForChatGPT[questionsForChatGPT.length-1];
 
+        //Waiting for ChatGPT response
+        let openaiResponse = [];
+        openaiResponse.push(await runCompletion('Personality insight with "' + content + '"'));
+        openaiResponse.push(await runCompletion('Work life with "' + content + '"'));
+        openaiResponse.push(await runCompletion('Career opportunities with "' + content + '"'));
         return res.json({ 
             openaiResponse
         })
